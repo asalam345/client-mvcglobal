@@ -1,0 +1,192 @@
+﻿
+@{
+    ViewBag.Title = "Sales";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="col-sm-8 col-sm-offset-2">
+        <p class="label-info" style="text-align:center;font-weight:bold;font-size:20px; height:30px;color:white">Product Sales Window </p>
+    </div>
+
+    <br />
+    <br />
+    <div class="col-sm-12">
+        <div class="row">
+
+            <div id="userform">
+
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <span> Bill No :</span>
+                    </div>
+                    <div class="col-sm-4">
+                        <input id="txtBillNo" class="form-control" placeholder="Bill No" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <span> Item Name :</span>
+                    </div>
+
+                    <div class="col-sm-4">
+
+                        <select class="form-control" id="txtItem" name="Item">
+                            <option value="0">Select Item</option>
+                            <option value="1">Soap</option>
+                            <option value="2">Baby Food</option>
+                            <option value="3">Shampoo</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <span> Customer Name :</span>
+                    </div>
+                    <div class="col-sm-4">
+                        <input id="txtCustomerName" class="form-control" placeholder="Customer Name" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <span> Sales Price :</span>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <input id="txtSalesPrice" class="form-control" placeholder="Sales Price" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <span>Customer Address :</span>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <input id="txtCustomerAddress" class="form-control" placeholder="Customer Address" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <span>Quantity :</span>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <input id="txtQuantity" class="form-control" placeholder="Quantity" />
+                    </div>
+                    <div class="col-sm-1">
+                        <button id="btnAdd" type="button" style="height:35px; background-color:ghostwhite;font-weight:bold"> Add </button>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <span> Mobile Number :</span>
+                    </div>
+                    <div class="col-sm-4">
+                        <input id="txtMobileNumber" class="form-control" placeholder="Mobile Number" />
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-sm-2">
+                        <span> Amount :</span>
+                    </div>
+
+                    <div class="col-sm-3">
+                        <input id="txtAmount" class="form-control" placeholder="Amount" />
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+        <hr />
+
+        <div class="form-group">
+            <div class="col-sm-2">
+                <span>Total Item =</span>
+            </div>
+
+            <div class="col-sm-2">
+                <input id="txtTotalItem" class="form-control" placeholder="Total Item" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <span>Total Qnty =</span>
+            </div>
+
+            <div class="col-sm-2">
+                <input id="txtTotalQnty" class="form-control" placeholder="Total Qnty" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <span>Total Price =</span>
+            </div>
+
+            <div class="col-sm-2">
+                <input id="txtTotalPrice" class="form-control" placeholder=" Total Price" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-4">
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2">
+                <span>Discount Amount =</span>
+            </div>
+
+            <div class="col-sm-2">
+                <input id="txtDiscountAmount" class="form-control" placeholder="Discount Amount" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-4">
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2">
+                <span>Net Price =</span>
+            </div>
+
+            <div class="col-sm-2">
+                <input id="txtNetPrice" class="form-control" placeholder="Net Price" />
+            </div>
+        </div>
+
+        <div class="col-sm-10 col-sm-offset-2">
+            <button id="btnAddNew" class="btn btn-success" type="button"> AddNew</button>
+            <button id="btnSave" class="btn btn-success" type="button"> Save</button>
+            <button id="btnSave" class="btn btn-success" type="button"> Cancel</button>
+            <button id="btnSave" class="btn btn-success" type="button"> Done</button>
+        </div>
+
+    </div>
+
+   
+
+
+
+
+
+
+

@@ -1,0 +1,320 @@
+﻿
+@{
+    //Layout = null;
+    ViewBag.Title = "Supplier";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+<div class="container">
+    <div class="col-sm-8 col-sm-offset-2">
+        <p class="label-info" style="text-align:center;font-weight:bold;font-size:20px; height:30px;color:white">Supplier Creation Window </p>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="col-sm-6 col-sm-offset-3">
+        <div class="row">
+
+            <div id="userform">
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <span> Supplier Id :</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <input id="txtSupplierId" class="form-control" placeholder="Supplier Id" readonly />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <span> Supplier Name :</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <input id="txtSupplierName" class="form-control" placeholder="Supplier Name" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <span> Supplier Short Name :</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <input id="txtShortName" class="form-control" placeholder="Short Name" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <span> Phone Number :</span>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <input id="txtPhoneNumber" class="form-control" placeholder="Phone Number" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <span> Email :</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <input id="txtEmailAddress" class="form-control" placeholder="Email Address" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <span> Address :</span>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <input id="txtAddress" class="form-control" placeholder="Address" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <br />
+        <div class="col-sm-8 col-sm-offset-4">
+            <button id="btnAddNew" class="btn btn-success" type="button"> Add New</button>
+            <button id="btnUpdate" class="btn btn-success" type="button" style="display:none">Update</button>
+            <button id="btnCancel" class="btn btn-success" type="button" style="display:none"> Cancel</button>
+            <button id="btnSave" class="btn btn-success" type="button"> Save</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <hr />
+    <div class="col-sm-12 ">
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-hover  table-bordered" id="SupplierTable" style="background-color:white !important;">
+                    <thead>
+                        <tr>
+                            <th style="width:70px !important;">Supplier Id</th>
+                            <th>Supplier Name</th>
+                            <th>Short Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>Created By</th>
+                            <th style="width:130px !important;text-align:center;">Action</th>
+                        </tr>
+                    </thead>
+                    @foreach (var item in @ViewBag.SupplierInfo as List<mvcglobal.Models.ModelSupplier>)
+                    {
+                        <tr>
+                            <td class="SupplierId">@item.SupplierId</td>
+                            <td class="SupplierName">@item.SupplierName</td>
+                            <td class="SupplierShortName">@item.SupplierShortName</td>
+                            <td class="SupplierPhone">@item.SupplierPhone</td>
+                            <td class="SupplierEmail">@item.SupplierEmail</td>
+                            <td class="SupplierAddress">@item.SupplierAddress</td>
+                            <td class="UserId">@item.UserId</td>
+
+                            <td><a id="@item.SupplierId" href="javascript:;" class="Edit_class btn btn-default" style="width:80px !important;">Edit</a>  <a id="@item.SupplierId" href="javascript:;" class="Delete_class btn btn-danger">Delete</a></td>
+
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#SupplierTable').dataTable({});
+
+    $('#btnAddNew').click(function () {
+        var valid = this.checkValidity();
+        if (valid) {
+            debugger;
+            event.preventDefault()
+            var strSupplierId = $("#txtSupplierId").val();
+            $.ajax({
+                type: "POST",
+                url: "/User/ShowSupplierId",
+                data: '{strSupplierId:"' + strSupplierId + '"}',
+                contentType: "application/json;",
+                datatype: "json",
+                success: function (data, status) {
+                    $("#txtSupplierId").val(data[0]);
+                    $("#txtSupplierName").val("");
+                    $("#txtShortName").val("");
+                    $("#txtEmailAddress").val("");
+                    $("#txtPhoneNumber").val("");
+                    $("#txtAddress").val("");
+                }
+            });
+        }
+    });
+
+    $('#btnSave').click(function () {
+        var valid = this.checkValidity();
+        $("#valid").html(valid);
+        if (valid) {
+            debugger;
+            event.preventDefault()
+            var strSupplierId = $("#txtSupplierId").val();
+            var strSupplierName = $("#txtSupplierName").val();
+            var strSupplierShortName = $("#txtShortName").val();
+            var strPhone = $("#txtPhoneNumber").val();
+            var strEmailAddress = $("#txtEmailAddress").val();
+            var strAddress = $("#txtAddress").val();
+           
+
+            $.ajax({
+                type: "POST",
+                url: "/User/AddSupplier",
+                data: '{strSupplierId:"' + strSupplierId + '", strSupplierName:"' + strSupplierName + '",strSupplierShortName:"' + strSupplierShortName + '", strPhone:"' + strPhone + '",strEmailAddress:"' + strEmailAddress + '", strAddress:"' + strAddress + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+                    if (data == "Successful") {
+                        swal("Added!", "Data Added Successfully.", "success");
+
+                        $("#txtSupplierId").val("");
+                        $("#txtSupplierName").val("");
+                        $("#txtShortName").val("");
+                        $("#txtPhoneNumber").val("");
+                        $("#txtEmailAddress").val("");
+                        $("#txtAddress").val("");
+
+                        window.location.href = '/User/Supplier';
+
+                    }
+                    else {
+                        swal("Something went wrong!", "error");
+                    }
+                }
+            });
+        }
+    });
+
+
+    $('.Edit_class').on('click', function () {
+        $("#btnAddNew").hide();
+        $("#btnSave").hide();
+        $("#btnUpdate").show();
+        $("#btnCancel").show();
+        debugger;
+
+        var row = $(this).closest("tr");
+        SupplierId = row.find(".SupplierId").html();
+        SupplierName = row.find(".SupplierName").html();
+        SupplierShortName = row.find(".SupplierShortName").html();
+
+        $(window).scrollTop(0);
+        $("#txtSupplierId").val(SupplierId);
+        $("#txtSupplierName").val(SupplierName);
+        $("#txtShortName").val(SupplierShortName);
+
+        $(window).scrollTop(0);
+    });
+
+
+    $('.Delete_class').on('click', function () {
+
+        var SupplierId = this.id;
+        var TableName = $(this).closest('.caption').children('.title').text();
+        swal({
+            title: "Are you sure want to Delete?",
+            text: "You will not be able to recover this file!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/User/DeleteSupplierData",
+                    data: '{SupplierId:"' + SupplierId + '"}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+
+                    success: function (data, status) {
+                        if (data == "Successful") {
+                            swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                            window.location.href = '/User/Supplier';
+
+                        }
+                        else {
+                            swal("Something went wrong!", "error");
+                        }
+                    },
+
+                });
+
+
+            } else {
+                swal("Cancelled", "Your file is safe :)", "error");
+            }
+        });
+
+    });
+
+
+    $('#btnUpdate').click(function () {
+        var strSupplierId = $("#txtSupplierId").val();
+        var strSupplierName = $("#txtSupplierName").val();
+        var strSupplierShortName = $("#txtShortName").val();
+        debugger;
+        $.ajax
+            ({
+                type: "POST",
+                url: "/User/UpdateSupplierData",
+                data: '{strSupplierId:"' + strSupplierId + '", strSupplierName:"' + strSupplierName + '",strSupplierShortName:"' + strSupplierShortName + '"}',
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+                    if (data == "Successful") {
+                        swal("Updated!", "Your imaginary file has been Updated.", "success");
+
+                        $("#txtSupplierId").val("");
+                        $("#txtSupplierName").val("");
+                        $("#txtShortName").val("");
+                        $("#txtPhoneNumber").val("");
+                        $("#txtEmailAddress").val("");
+                        $("#txtAddress").val("");
+                        $("#btnAddNew").show();
+                        $("#btnSave").show();
+                        $("#btnUpdate").hide();
+                        $("#btnCancelC").hide();
+
+                        window.location.href = '/User/Supplier';
+
+                    }
+                    else {
+                        swal("Something went wrong!", "error");
+                    }
+                }
+            })
+    });
+
+    $('#btnCancel').click(function () {
+
+        $("#txtSupplierId").val("");
+        $("#txtSupplierName").val("");
+        $("#txtShortName").val("");
+        $("#txtPhoneNumber").val("");
+        $("#txtEmailAddress").val("");
+        $("#txtAddress").val("");
+        $("#btnAddNew").show();
+        $("#btnSave").show();
+
+    });
+
+
+</script>
+
+

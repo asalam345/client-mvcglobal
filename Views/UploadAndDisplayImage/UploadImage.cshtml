@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewBag.Title = "UploadImage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<div class="container">
+    <div class="col-sm-8 col-sm-offset-2">
+        <p class="label-info" style="text-align:center;font-weight:bold;font-size:20px; height:30px;color:white">Item Image Upload Window </p>
+    </div>
+
+    <br />
+    <br />
+
+    <div class="row">
+        <div class="col-sm-12">
+            <form>
+                <div class="col-sm-8 col-sm-offset-2">
+                    <fieldset>
+                        @*<legend>Item Image Detail </legend>*@
+                        <div class="form-group">
+                            <div class="col-sm-2">
+                                <span> Item Name :</span>
+                            </div>
+
+                            <div class="col-sm-6">
+                                @if (ViewBag.ItemList != null)
+                                {
+                                    @Html.DropDownList("ddlItem", new SelectList(ViewBag.ItemList, "Value", "Text"), "Select Item", new { @class = "form-control", @id = "ddlItem" })
+                                }
+                            </div>
+
+                            <div class="col-sm-4">
+                                <label id="dfdfh"></label>
+                            </div>
+
+                            <br />
+                            <div class="col-sm-12" style="margin-top: 15px;"></div>
+                            <div class="col-sm-2" style="margin-top: 15px;">
+                                <span> Image :</span>
+                            </div>
+                            <div class="col-sm-4 addlogo" style="margin-top: 15px;">
+                                <div class="avatar">
+                                    <input type="hidden" id="fileName" />
+                                    <div class="kv-avatar center-block">
+                                        <input id="imgupload" name="imgupload" type="file" class="file-loading" required accept="image/jpg,image/png,image/jpeg" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </fieldset>
+
+                    <div class="clearfix"> </div>
+                </div>
+                <br />
+                <div class="col-sm-12"></div>
+                <div class=" col-sm-6 col-sm-offset-3" style="margin-top:20px;margin-left:315px">
+                    <button type="reset" id="rst" class="btn btn-success">Reset</button>
+                    @*<button type="submit" class="btn btn-primary" id="addprofile" value="">Submit</button>*@
+                    <input type="submit" id="addImage" class="btn btn-success" value="Save" />
+                </div>
+            </form>
+        </div>
+    </div>
+ </div>
+    <script>
+        $(document).ready(function () {
+
+            $('#addImage').click(function () {
+                debugger;
+                var formData = new FormData();
+                var files = $("#imgupload").get(0).files;
+                var ItemId = $("#ddlItem").find("option:selected").val();
+
+                formData.append("file", files[0]);
+                formData.append("ItemId", ItemId);
+                //formData.append("Email", $('#email').val());
+                //formData.append("Password", $('#password').val());
+                //formData.append("Gender", $("input[name='gender']:checked").val());
+                formData.append("Profile", files[0].name);
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/UploadAndDisplayImage/AddImage",
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response == 'Success') {
+                            alert("successfully Profile Updated");
+                        }
+                        else {
+                            alert("Something Went Wrong..");
+                        }
+                    }
+                })
+            })
+        })
+
+          //contentType: "application/json; charset=utf-8",
+                    //dataType: "json",
+
+                    //success: function (data, status)
+    </script>
+
+
+

@@ -1,0 +1,436 @@
+﻿
+@{
+	ViewBag.Title = "Item";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	decimal i = 0;
+}
+@*<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/rowreorder/1.2.6/js/dataTables.rowReorder.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+<link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/rowreorder/1.2.6/css/rowReorder.dataTables.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" />*@
+
+<div class="container">
+    <div class="col-sm-8 col-sm-offset-2">
+        <p class="label-info" style="text-align:center;font-weight:bold;font-size:20px; height:30px;color:white">Item Entry Window </p>
+    </div>
+
+    <br />
+    <br />
+    <div class="col-sm-6 col-sm-offset-3">
+        <div class="row">
+
+            <div id="userform">
+
+                <div class="form-group" style="display:none;">
+                    <div class="col-sm-4">
+                        <span> Item Id :</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <input id="txtItemId" class="form-control" placeholder="Item Id" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <span> Item Name :</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <input id="txtItemName" class="form-control" placeholder="Item Name" />
+                    </div>
+                </div>
+
+                <div class="form-group" style="display:none;">
+                    <div class="col-sm-4">
+                        <span>Item Serial :</span>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <input id="txtItemSerial" class="form-control" placeholder="Item Serial" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <span> Brand :</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <input id="txtItemBrand" class="form-control" placeholder="Brand" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <span> Category :</span>
+                    </div>
+
+                    <div class="col-sm-8">
+                        @if (ViewBag.CategoryList != null)
+                        {
+                            @Html.DropDownList("ddlCategory", new SelectList(ViewBag.CategoryList, "Value", "Text"), "Select Category", new { @class = "form-control", @id = "ddlCategory" })
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <span> Unit :</span>
+                    </div>
+
+                    <div class="col-sm-8">
+                        @if (ViewBag.UnitList != null)
+                        {
+                            @Html.DropDownList("ddlUnit", new SelectList(ViewBag.UnitList, "Value", "Text"), new { @class = "form-control", @id = "ddlUnit" })
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group" style="display:none;">
+                    <div class="col-sm-4">
+                        <span> Item Type :</span>
+                    </div>
+
+                    <div class="col-sm-8">
+                        @if (ViewBag.ItemTypeList != null)
+                        {
+                            @Html.DropDownList("ddlItemType", new SelectList(ViewBag.ItemTypeList, "Value", "Text"), new { @class = "form-control", @id = "ddlItemType" })
+                        }
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <span> Item Status :</span>
+                    </div>
+
+                    <div class="col-sm-8">
+                        @if (ViewBag.ItemStatusList != null)
+                        {
+                            @Html.DropDownList("ddlItemStatus", new SelectList(ViewBag.ItemStatusList, "Value", "Text"), new { @class = "form-control", @id = "ddlItemStatus" })
+                        }
+                    </div>
+                </div>
+
+
+
+                <div class="form-group" style="display:none;">
+                    <div class="col-sm-4">
+                        <span> Purchase Price :</span>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <input id="txtPurchasePrice" class="form-control" placeholder="Purchase Price" />
+                    </div>
+                </div>
+
+
+                <div class="form-group" style="display:none;">
+                    <div class="col-sm-4">
+                        <span> Sales Price :</span>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <input id="txtSalesPrice" class="form-control" placeholder="Sales Price" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br />
+        <div class="col-sm-8 col-sm-offset-4">
+            <button id="btnAddNew" class="btn btn-success" type="button"> Add New</button>
+            <button id="btnUpdate" class="btn btn-success" type="button" style="display:none">Update</button>
+            <button id="btnCancel" class="btn btn-success" type="button" style="display:none"> Cancel</button>
+            <button id="btnSave" class="btn btn-success" type="button"> Save</button>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="container-fluid">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-hover  table-bordered" id="ItemTable" style="background-color:white !important;font-size:12px !important; width:100%">
+                    <thead>
+						<tr>
+							<th>Serial No</th>
+							<th style="width:50px!important;display:none;">Item Id</th>
+							<th>Item Name</th>
+							<th style="display:none;">Unit Id</th>
+							<th>Unit Name</th>
+							<th style="display:none;">Category Id</th>
+							<th>Category Name</th>
+							<th style="display:none;">Item Status Id</th>
+							@*<th>Item Status</th>
+		<th style="display:none;">Item Type Id</th>*@
+							<th>Item Type</th>
+							<th>Item Brand</th>
+							<th>Purchase Price</th>
+							<th>Sales Price</th>
+							<th>Balance</th>
+							<th>Created By</th>
+							<th style="width:167px !important; text-align:center;">Action</th>
+						</tr>
+                    </thead>
+                    @foreach (var item in @ViewBag.ItemInfo as List<mvcglobal.Models.ModelItem>)
+					{
+						 i++;
+				<tr>
+					<td class="ItemSerial">@i</td>
+					<td style="display:none;" class="ItemId">@item.ItemId</td>
+					<td class="ItemName">@item.ItemName</td>
+					<td class="UnitId" style="display: none">@item.UnitId</td>
+					<td class="UnitName">@item.UnitName</td>
+					<td class="CategoryId" style="display:none">@item.CategoryId</td>
+					<td class="CategoryName">@item.CategoryName</td>
+					<td class="ItemStatusId" style="display:none">@item.ItemStatusId</td>
+					<td class="ItemStatusName">@item.ItemStatusName</td>
+					<td class="ItemTypeId" style="display:none">@item.ItemTypeId</td>
+					<td class="ItemTypeName" style="display:none">@item.ItemTypeName</td>
+					<td class="ItemBrand">@item.ItemBrand</td>
+					<td class="PurchasePrice">@item.PurchasePrice</td>
+					<td class="SalesPrice">@item.SalesPrice</td>
+					<td class="ItemBalance">@item.ItemBalance</td>
+					<td class="CreationBy">@item.CreationBy</td>
+					<td><a id="@item.ItemId" href="javascript:;" class="Edit_class btn btn-default" style="width:80px !important;">Edit</a>  <a id="@item.ItemId" href="javascript:;" class="Delete_class btn btn-danger">Delete</a></td>
+
+				</tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $('#ItemTable').dataTable({
+            //rowReorder: {
+            //    selector: 'td:nth-child(2)'
+            //},
+            responsive: true
+        });
+
+    $('#btnAddNew').click(function () {
+        var valid = this.checkValidity();
+        if (valid) {
+            debugger;
+            event.preventDefault()
+            var strItemId = $("#txtItemId").val();
+            $.ajax({
+                type: "POST",
+                url: "/Product/ShowItemId",
+                data: '{strItemId:"' + strItemId + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+                    $("#txtItemId").val(data[0]);
+                    $("#txtItemName").val("");
+                    $("#txtItemSerial").val("");
+                    $("#txtItemBrand").val("");
+                    $("#txtPurchasePrice").val("");
+                    $("#txtSalesPrice").val("");
+                }
+            });
+        }
+    });
+
+    $("#btnSave").click(function () {
+        var valid = this.checkValidity();
+        $("#valid").html(valid);
+        if (valid) {
+            debugger;
+            event.preventDefault()
+            var ItemId = $("#txtItemId").val();
+            var ItemName = $("#txtItemName").val();
+            var ItemSerial = $("#txtItemSerial").val();
+            var ItemBrand = $("#txtItemBrand").val();
+            var UnitId = $("#ddlUnit").find("option:selected").val();
+            var UnitName = $("#ddlUnit").find("option:selected").text();
+            var CategoryId = $("#ddlCategory").find("option:selected").val();
+            var CategoryName = $("#ddlCategory").find("option:selected").text();
+            var ItemTypeId = $("#ddlItemType").find("option:selected").val();
+            var ItemTypeName = $("#ddlItemType").find("option:selected").text();
+            var ItemStatusId = $("#ddlItemStatus").find("option:selected").val();
+            var ItemStatusName = $("#ddlItemStatus").find("option:selected").text();
+            var PurchasePrice = $("#txtPurchasePrice").val();
+            var SalesPrice = $("#txtSalesPrice").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Product/AddItem",
+                data: '{ItemId:"' + ItemId + '",ItemName:"' + ItemName + '", ItemSerial:"' + ItemSerial + '",ItemBrand:"' + ItemBrand + '",UnitId:"' + UnitId + '", CategoryId:"' + CategoryId + '",ItemTypeId:"' + ItemTypeId + '",ItemStatusId:"' + ItemStatusId + '", PurchasePrice:"' + PurchasePrice + '",SalesPrice:"' + SalesPrice + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+                    if (data == "Successful") {
+                        swal("Added!", "Data Added Successfully.", "success");
+                        $("#txtItemId").val("");
+                        $("#txtItemName").val("");
+                        $("#txtItemSerial").val("");
+                        $("#txtItemBrand").val("");
+                        $("#txtPurchasePrice").val("");
+                        $("#txtSalesPrice").val("");
+                        window.location.href = '/Product/Item';
+                    }
+                    else {
+                        swal(data);
+                    }
+                }
+            });
+        }
+
+    });
+
+    $('.Edit_class').on('click', function () {
+        $("#btnAddNew").hide();
+        $("#btnSave").hide();
+        $("#btnUpdate").show();
+        $("#btnCancel").show();
+        debugger;
+
+        var row = $(this).closest("tr");
+        ItemId = row.find(".ItemId").html();
+        ItemName = row.find(".ItemName").html();
+        ItemSerial = row.find(".ItemSerial").html();
+        ItemBrand = row.find(".ItemBrand").html();
+        UnitId = row.find(".UnitId").html();
+        CategoryId = row.find(".CategoryId").html();
+        ItemTypeId = row.find(".ItemTypeId").html();
+        ItemStatusId = row.find(".ItemStatusId").html();
+        PurchasePrice = row.find(".PurchasePrice").html();
+        SalesPrice = row.find(".SalesPrice").html();
+
+        $(window).scrollTop(0);
+
+        $("#txtItemId").val(ItemId);
+        $("#txtItemName").val(ItemName);
+        $("#txtItemSerial").val(ItemSerial);
+        $("#txtItemBrand").val(ItemBrand);
+        $("#txtPurchasePrice").val(PurchasePrice);
+        $("#txtSalesPrice").val(SalesPrice);
+        $("#ddlUnit").bind("option:selected").val(UnitId);
+        $("#ddlCategory").bind("option:selected").val(CategoryId);
+        $("#ddlItemType").bind("option:selected").val(ItemTypeId);
+        $("#ddlItemStatus").bind("option:selected").val(ItemStatusId);
+        $(window).scrollTop(0);
+    });
+
+    $('.Delete_class').on('click', function () {
+
+        var ItemId = this.id;
+        var TableName = $(this).closest('.caption').children('.title').text();
+        swal({
+            title: "Are you sure want to Delete?",
+            text: "You will not be able to recover this file!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Product/DeleteItemData",
+                    data: '{ItemId:"' + ItemId + '"}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+
+                    success: function (data, status) {
+                        if (data == "Successful") {
+                            swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                            window.location.href = '/Product/Item';
+
+                        }
+                        else {
+                            swal("Something went wrong!", "error");
+                        }
+                    },
+
+                });
+
+
+            } else {
+                swal("Cancelled", "Your file is safe :)", "error");
+            }
+        });
+
+    });
+    $('#btnUpdate').click(function () {
+        var ItemId = $("#txtItemId").val();
+        var ItemName = $("#txtItemName").val();
+        var ItemSerial = $("#txtItemSerial").val();
+        var ItemBrand = $("#txtItemBrand").val();
+        var UnitId = $("#ddlUnit").find("option:selected").val();
+        var UnitName = $("#ddlUnit").find("option:selected").text();
+        var CategoryId = $("#ddlCategory").find("option:selected").val();
+        var CategoryName = $("#ddlCategory").find("option:selected").text();
+        var ItemTypeId = $("#ddlItemType").find("option:selected").val();
+        var ItemTypeName = $("#ddlItemType").find("option:selected").text();
+        var ItemStatusId = $("#ddlItemStatus").find("option:selected").val();
+        var ItemStatusName = $("#ddlItemStatus").find("option:selected").text();
+        var PurchasePrice = $("#txtPurchasePrice").val();
+        var SalesPrice = $("#txtSalesPrice").val();
+
+        // var strCategoryId = $("#ddlCategory").find("option:selected").val();
+
+        debugger;
+        $.ajax
+            ({
+                type: "POST",
+                url: "/Product/UpdateItemData",
+                data: '{ItemId:"' + ItemId + '",ItemName:"' + ItemName + '", ItemSerial:"' + ItemSerial + '",ItemBrand:"' + ItemBrand + '",UnitId:"' + UnitId + '", CategoryId:"' + CategoryId + '",ItemTypeId:"' + ItemTypeId + '",ItemStatusId:"' + ItemStatusId + '", PurchasePrice:"' + PurchasePrice + '",SalesPrice:"' + SalesPrice + '"}',
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+                    if (data == "Successful") {
+                        swal("Updated!", "Your imaginary file has been Updated.", "success");
+
+                        $("#txtItemId").val("");
+                        $("#txtItemName").val("");
+                        $("#txtItemSerial").val("");
+                        $("#txtItemBrand").val("");
+                        $("#txtPurchasePrice").val("");
+                        $("#txtSalesPrice").val("");
+                        $("#btnAddNew").show();
+                        $("#btnSave").show();
+                        $("#btnUpdate").hide();
+                        $("#btnCancelC").hide();
+
+                        window.location.href = '/Product/Item';
+
+                    }
+                    else {
+                        swal("Something went wrong!", "error");
+                    }
+                }
+            })
+    });
+
+    $("#btnCancel").click(function () {
+        $("#txtItemId").val("");
+        $("#txtItemName").val("");
+        $("#txtItemSerial").val("");
+        $("#txtItemBrand").val("");
+        $("#txtPurchasePrice").val("");
+        $("#txtSalesPrice").val("");
+        $("#btnAddNew").show();
+        $("#btnSave").show();
+        $("#btnUpdate").hide();
+        $("#btnCancel").hide();
+
+    });
+
+
+</script>
+
+
+

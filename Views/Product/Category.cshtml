@@ -1,0 +1,650 @@
+﻿@*@model IEnumerable<mvcglobal.Models.ModelProduct>*@
+@model mvcglobal.Models.ModelProduct
+@{
+    ViewBag.Title = "Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+	<div class="container-fluid">
+		<div class="col-sm-8">
+			<button id="btnAddHeadCategory" class="btn  btn-primary" style="font-size:24px; font-weight:bold;" type="button"> ADD Head Category +</button>
+			<button id="btnAddCategory" class="btn  btn-primary" style="font-size:24px; font-weight:bold; display:none;" type="button"> ADD Category +</button>
+			<button id="btnAddSubCategory" class="btn  btn-primary" style="font-size:24px; font-weight:bold; " type="button">ADD SubCategory +</button>
+		</div>
+		<br />
+		<br />
+		<br />
+		<div id="HeadCategory" style="display:none;">
+			<div class="container">
+				<div class="col-sm-6 col-sm-offset-4">
+					<p class="label-info" style="text-align:center;font-weight:bold;font-size:20px; height:30px;color:white">Head Category</p>
+				</div>
+				<div class="col-sm-6 col-sm-offset-3">
+					<div class="row">
+
+						<div id="userform">
+
+
+
+							<div class="form-group">
+								<div class="col-sm-4">
+									<span> Category Name :</span>
+								</div>
+								<div class="col-sm-8">
+									<input id="txtCategoryName" class="form-control" placeholder="Category Name" />
+									
+								</div>
+							</div>
+							
+						</div>
+
+					</div>
+					<br />
+					<div class="col-sm-8 col-sm-offset-4">
+						<button id="btnAddNewCategory" class="btn btn-success" type="button"> Add New</button>
+						<button id="btnUpdateCategory" class="btn btn-success" type="button" style="display:none">Update</button>
+						<button id="btnCancelCategory" class="btn btn-success" type="button" style="display:none"> Cancel</button>
+						<button id="btnSaveCategory" class="btn btn-success" type="button"> Save</button>
+					</div>
+
+				</div>
+
+			</div>
+			<hr />
+
+
+			<div class="col-sm-6 col-sm-offset-3">
+				<div class="card">
+					<div class="card-body">
+						<table class="table table-hover  table-bordered" id="HeadCategoryTable" style="background-color:white !important;">
+							<thead>
+								<tr>
+									<th>Category Name</th>
+									<th style="width:135px !important;">Action</th>
+								</tr>
+							</thead>
+							@foreach (var item in @ViewBag.CategoryInfo as List<mvcglobal.Models.ModelProduct>)
+							{
+								if (item.ParentId == "0")
+								{
+								<tr>
+									<td class="CategoryName">@item.CategoryName</td>
+
+									<td><a id="@item.CategoryId" href="javascript:;" class="Edit_class btn btn-default" style="width:80px !important;">Edit</a>  
+                                    <a id="@item.CategoryId" href="javascript:;" class="Delete_class btn btn-danger">Delete</a></td>
+
+								</tr>
+								}
+							}
+						</table>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div id="Category">
+			<div class="container">
+				<div class="col-sm-6 col-sm-offset-4">
+					<p class="label-info" style="text-align:center;font-weight:bold;font-size:20px; height:30px;color:white">Product Category Window </p>
+				</div>
+				<div class="col-sm-6 col-sm-offset-3">
+					<div class="row">
+
+						<div id="userform">
+
+							<div class="form-group" style="display:none;">
+								<div class="col-sm-4">
+									<span> Category Id :</span>
+								</div>
+								<div class="col-sm-8">
+									<input id="txtCategoryId" class="form-control" placeholder="Category Id" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-sm-4">
+									<span> Category Name :</span>
+								</div>
+								<div class="col-sm-8">
+									<input id="txtCategoryName" class="form-control" placeholder="Category Name" />
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-4">
+									<span>Parent Category Name :</span>
+								</div>
+								<div class="col-sm-8">
+                                    @{ 
+										ViewBag.HeadCategoryInfo = Model.CategoryInfo.Where(w => w.ParentId == "0").ToList();
+                                    }
+									@Html.DropDownListFor(m => m.CategoryInfo, new SelectList(ViewBag.HeadCategoryInfo, "CategoryId", "CategoryName"), "Select Category", new { @class = "form-control", @id = "ddlHeadCategory" })
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<br />
+					<div class="col-sm-8 col-sm-offset-4">
+						<button id="btnAddNewCategory" class="btn btn-success" type="button"> Add New</button>
+						<button id="btnUpdateCategory" class="btn btn-success" type="button" style="display:none">Update</button>
+						<button id="btnCancelCategory" class="btn btn-success" type="button" style="display:none"> Cancel</button>
+						<button id="btnSaveCategory" class="btn btn-success" type="button"> Save</button>
+					</div>
+
+				</div>
+
+			</div>
+			<hr />
+
+
+			<div class="col-sm-6 col-sm-offset-3">
+				<div class="card">
+					<div class="card-body">
+						<table class="table table-hover  table-bordered" id="CategoryTable" style="background-color:white !important;">
+							<thead>
+								<tr>
+									@*<th>Category Id</th>*@
+									<th>Category Name</th>
+									<th style="width:135px !important;">Action</th>
+								</tr>
+							</thead>
+							@foreach (var item in @ViewBag.CategoryInfo as List<mvcglobal.Models.ModelProduct>)
+							{
+								if (item.ParentId != "0")
+								{
+									<tr>
+										<td class="CategoryName">@item.CategoryName</td>
+
+										<td>
+											<a id="@item.CategoryId" href="javascript:;" class="Edit_class btn btn-default" style="width:80px !important;">Edit</a>
+											<a id="@item.CategoryId" href="javascript:;" class="Delete_class btn btn-danger">Delete</a>
+										</td>
+
+									</tr>
+								}
+							}
+						</table>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<div id="SubCategory" style="display:none;">
+			<div class="container">
+				<div class="col-sm-6 col-sm-offset-3">
+					<p class="label-info" style="text-align:center;font-weight:bold;font-size:20px; height:30px;color:white">Product Sub Category Window </p>
+				</div>
+				<div class="col-sm-6 col-sm-offset-3">
+					<div class="row">
+
+						<div id="userform">
+
+							<div class="form-group" style="display:none;">
+								<div class="col-sm-4">
+									<span>Sub Category Id :</span>
+								</div>
+								<div class="col-sm-8">
+									<input id="txtSubCategoryId" class="form-control" placeholder="Sub Category Id" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-sm-4">
+									<span>Sub Category Name :</span>
+								</div>
+								<div class="col-sm-8">
+									<input id="txtSubCategoryName" class="form-control" placeholder="Sub Category Name" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-sm-4">
+									<span>Parent Category Name :</span>
+								</div>
+								<div class="col-sm-8">
+									@{
+										ViewBag.CategoryInfo = Model.CategoryInfo.Where(w => w.ParentId != "0").ToList();
+									}
+									@Html.DropDownListFor(m => m.CategoryInfo, new SelectList(ViewBag.CategoryInfo, "CategoryId", "CategoryName"), "Select Category", new { @class = "form-control", @id = "ddlCategory" })
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+					<br />
+					<div class="col-sm-8 col-sm-offset-4">
+						<button id="btnAddNewSubCategory" class="btn btn-success" type="button"> Add New</button>
+						<button id="btnUpdateSubCategory" class="btn btn-success" type="button" style="display:none">Update</button>
+						<button id="btnCancelSubCategory" class="btn btn-success" type="button" style="display:none"> Cancel</button>
+						<button id="btnSaveSubCategory" class="btn btn-success" type="button"> Save</button>
+					</div>
+
+				</div>
+
+			</div>
+			<hr />
+			<div class="col-sm-9 col-sm-offset-2">
+				<div class="card">
+					<div class="card-body">
+						<table class="table table-hover  table-bordered" id="SubCategoryTable" style="background-color:white !important;">
+							<thead>
+								<tr>
+									@*<th style="width:50px!important;">Sub Category Id</th>*@
+									<th>Category Name</th>
+									<th style="display:none;">Category Id</th>
+									<th>Parent Category Name</th>
+									<th style="width:50px !important; text-align:center;">Action</th>
+								</tr>
+							</thead>
+							@foreach (var item in @ViewBag.SubCategoryInfo as List<mvcglobal.Models.ModelProduct>)
+							{
+						<tr>
+							@*<td class="SubCategoryId">@item.SuCategoryId</td>
+		<td class="SubCategoryName">@item.SubCategoryName</td>*@
+							<td class="CategoryId" style="display:none">@item.CategoryId</td>
+							<td class="CategoryName">@item.CategoryName</td>
+							<td class="CategoryName">@item.ParentName</td>
+
+							<td><a id="@item.SubCategoryId" href="javascript:;" class="Edit_classSubCategory btn btn-default" style="width:80px !important;">Edit</a>  <a id="@item.SubCategoryId" href="javascript:;" class="Delete_classSubCategory btn btn-danger">Delete</a></td>
+
+						</tr>
+							}
+						</table>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+
+<script type="text/javascript">
+    
+</script>
+
+<script>
+    $(document).ready(function () {
+        debugger;
+        var Category = '@Session["Category"]';
+        var SubCategory = '@Session["SubCategory"]';
+        if (Category == 'Yes') {
+            $("#Category").show();
+            $("#SubCategory").hide();
+            $("#btnAddSubCategory").show();
+            $("#btnAddCategory").hide();
+        }
+        if (SubCategory == 'Yes') {
+            $("#Category").hide();
+            $("#SubCategory").show();
+            $("#btnAddSubCategory").hide();
+            $("#btnAddCategory").show();
+        }
+    });
+    function AllCategoryHide() {
+		$("#SubCategory").hide();
+		$("#Category").hide();
+		$("#btnAddHeadCategory").hide();
+
+		$("#btnAddSubCategory").hide();
+		$("#btnAddCategory").hide();
+		$("#HeadCategory").hide();
+	}
+	$('#btnAddHeadCategory').click(function () {
+        AllCategoryHide();
+        $("#btnAddSubCategory").show();
+		$("#btnAddCategory").show();
+        $("#HeadCategory").show();
+	});
+    $('#btnAddCategory').click(function () {
+		AllCategoryHide();
+        $("#Category").show();
+        $("#btnAddSubCategory").show();
+		$("#btnAddHeadCategory").show();
+    });
+	$('#btnAddSubCategory').click(function () {
+		AllCategoryHide();
+		$("#SubCategory").show();
+		$("#btnAddHeadCategory").show();
+		$("#btnAddCategory").show();
+	});
+    $('#CategoryTable').dataTable({
+    });
+
+    $('#btnAddNewCategory').click(function () {
+        var valid = this.checkValidity();
+        if (valid) {
+            debugger;
+            event.preventDefault()
+            var strCategoryId = $("#txtCategoryId").val();
+            $.ajax({
+                type: "POST",
+                url: "/Product/ShowCategoryId",
+                data: '{strCategoryId:"' + strCategoryId + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+                    $("#txtCategoryId").val(data[0]);
+                    $("#txtCategoryName").val("");
+                }
+            });
+        }
+    });
+
+    $('#btnSaveCategory').click(function () {
+        var valid = this.checkValidity();
+        $("#valid").html(valid);
+        if (valid) {
+            debugger;
+            event.preventDefault()
+            var strCategoryId = $("#txtCategoryId").val();
+            var strCategoryName = $("#txtCategoryName").val();
+            $.ajax({
+                type: "POST",
+                url: "/Product/AddCategory",
+                data: '{strCategoryId:"' + strCategoryId + '", strCategoryName:"' + strCategoryName + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+                    if (data == "Successful") {
+                        swal("Added!", "Data Added Successfully.", "success");
+
+                        $("#txtCategoryId").val("");
+                        $("#txtCategoryName").val("");
+                        window.location.href = '/Product/Category';
+
+                    }
+                    else {
+                        swal("Something went wrong!", "error");
+                    }
+                }
+            });
+        }
+    });
+
+    $('.Edit_class').on('click', function () {
+        $("#btnAddNewCategory").hide();
+        $("#btnSaveCategory").hide();
+        $("#btnUpdateCategory").show();
+        $("#btnCancelCategory").show();
+
+        var row = $(this).closest("tr");
+        CategoryId = row.find(".CategoryId").html();
+        CategoryName = row.find(".CategoryName").html();
+
+        $(window).scrollTop(0);
+        $("#txtCategoryId").val(CategoryId);
+        $("#txtCategoryName").val(CategoryName)
+        $(window).scrollTop(0);
+    });
+
+
+    $('.Delete_class').on('click', function () {
+
+        var CategoryId = this.id;
+        var TableName = $(this).closest('.caption').children('.title').text();
+        swal({
+            title: "Are you sure want to Delete?",
+            text: "You will not be able to recover this file!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Product/DeleteCategoryData",
+                    data: '{CategoryID:"' + CategoryId + '"}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+
+                    success: function (data, status) {
+                        if (data == "Successful") {
+                            swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                            window.location.href = '/Product/Category';
+
+                        }
+                        else {
+                            swal("Something went wrong!", "error");
+                        }
+                    },
+
+                });
+
+
+            } else {
+                swal("Cancelled", "Your file is safe :)", "error");
+            }
+        });
+
+    });
+
+
+    $('#btnUpdateCategory').click(function () {
+        var CategoryId = $("#txtCategoryId").val();
+        var CategoryName = $("#txtCategoryName").val();
+
+        debugger;
+        $.ajax
+            ({
+                type: "POST",
+                url: "/Product/UpdateCategoryData",
+                data: '{CategoryId:"' + CategoryId + '",CategoryName:"' + CategoryName + '"}',
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+                    if (data == "Successful") {
+                        swal("Updated!", "Your imaginary file has been Updated.", "success");
+
+                        $("#txtCategoryId").val("");
+                        $("#txtCategoryName").val("");
+                        $("#btnAddNewCategory").show();
+                        $("#btnSaveCategory").show();
+                        $("#btnUpdateCategory").hide();
+                        $("#btnCancelCategory").hide();
+
+                        window.location.href = '/Product/Category';
+
+                    }
+                    else {
+                        swal("Something went wrong!", "error");
+                    }
+                }
+            })
+    });
+
+    $('#btnCancelCategory').click(function () {
+
+        $("#txtCategoryId").val("");
+        $("#txtCategoryName").val("");
+        $("#btnUpdateCategory").hide();
+        $("#btnCancelCategory").hide();
+        $("#btnAddNewCategory").show();
+        $("#btnSaveCategory").show();
+
+    });
+</script>
+
+<script>
+   
+
+    $('#SubCategoryTable').dataTable({
+    });
+
+    $('#btnAddNewSubCategory').click(function () {
+        var valid = this.checkValidity();
+        if (valid) {
+          
+            event.preventDefault()
+            var strSubCategoryId = $("#txtSubCategoryId").val();
+            $.ajax({
+                type: "POST",
+                url: "/Product/ShowSubCategoryId",
+                data: '{strSubCategoryId:"' + strSubCategoryId + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                
+                success: function (data, status) {
+                    debugger;
+                    $("#txtSubCategoryId").val(data[0]);
+                    $("#txtSubCategoryName").val("");
+                }
+            });
+        }
+    });
+
+    $('#btnSaveSubCategory').click(function () {
+        var valid = this.checkValidity();
+        $("#valid").html(valid);
+        if (valid) {
+            debugger;
+            event.preventDefault()
+            var strSubCategoryId = $("#txtSubCategoryId").val();
+            var strSubCategoryName = $("#txtSubCategoryName").val();
+            var strCategoryId = $("#ddlCategory").find("option:selected").val();
+            var strCategoryName = $("#ddlCategory").find("option:selected").text();
+
+            $.ajax({
+                type: "POST",
+                url: "/Product/AddSubCategory",
+                data: '{strSubCategoryId:"' + strSubCategoryId + '", strSubCategoryName:"' + strSubCategoryName + '",strCategoryId:"' + strCategoryId + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+                    if (data == "Successful") {
+                        swal("Added!", "Data Added Successfully.", "success");
+                        $("#txtSubCategoryId").val("");
+                        $("#txtSubCategoryName").val("");
+                       window.location.href = '/Product/Category';
+
+                       // var markup = "<tr role='row' class='odd'><td class='SubCategoryId sorting_1'>" + strSubCategoryId + "</td><td class='SubCategoryName'>" + strSubCategoryName + "</td> <td class='CategoryId' style='display: none'>" + strCategoryId + "</td> <td class='CategoryName'>" + strCategoryName + "</td> <td><a id='3' href='javascript:;' class='Edit_classSubCategory btn btn-default' style='width:80px!important;'>Edit</a>  <a id='3' href='javascript:;' class='Delete_classSubCategory btn btn-danger'>Delete</a></td></tr>";
+                       // $('#SubCategoryTable > tbody:last-child').append(markup);
+
+                    }
+                    else {
+                        swal("Something went wrong!", "error");
+                    }
+                }
+            });
+        }
+    });
+
+    $('.Edit_classSubCategory').on('click', function () {
+        $("#btnAddNewSubCategory").hide();
+        $("#btnSaveSubCategory").hide();
+        $("#btnUpdateSubCategory").show();
+        $("#btnCancelSubCategory").show();
+        debugger;
+
+        var row = $(this).closest("tr");
+        SubCategoryId = row.find(".SubCategoryId").html();
+        SubCategoryName = row.find(".SubCategoryName").html();
+        CategoryId = row.find(".CategoryId").html();
+        CategoryName = row.find(".CategoryName").html();
+        $(window).scrollTop(0);
+        $("#txtSubCategoryId").val(SubCategoryId);
+        $("#txtSubCategoryName").val(SubCategoryName);
+        $("#ddlCategory").val(CategoryId);
+        $(window).scrollTop(0);
+    });
+
+
+    $('.Delete_classSubCategory').on('click', function () {
+
+        var SubCategoryId = this.id;
+        var TableName = $(this).closest('.caption').children('.title').text();
+        swal({
+            title: "Are you sure want to Delete?",
+            text: "You will not be able to recover this file!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Product/DeleteSubCategoryData",
+                    data: '{SubCategoryID:"' + SubCategoryId + '"}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+
+                    success: function (data, status) {
+                        if (data == "Successful") {
+                            swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                            window.location.href = '/Product/Category';
+                           // $('#SubCategoryTable').dataTable({
+                           // });
+                        }
+                        else {
+                            swal("Something went wrong!", "error");
+                        }
+                    },
+
+                });
+
+
+            } else {
+                swal("Cancelled", "Your file is safe :)", "error");
+            }
+        });
+
+    });
+
+
+    $('#btnUpdateSubCategory').click(function () {
+        var SubCategoryId = $("#txtSubCategoryId").val();
+        var SubCategoryName = $("#txtSubCategoryName").val();
+        var CategoryId = $("#ddlCategory").val();
+
+        debugger;
+        $.ajax
+            ({
+                type: "POST",
+                url: "/Product/UpdateSubCategoryData",
+                data: '{SubCategoryId:"' + SubCategoryId + '",SubCategoryName:"' + SubCategoryName + '",CategoryId:"' + CategoryId + '"}',
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+                    if (data == "Successful") {
+                        swal("Updated!", "Your imaginary file has been Updated.", "success");
+
+                        $("#txtSubCategoryId").val("");
+                        $("#txtSubCategoryName").val("");
+                        $("#btnAddNewSubCategory").show();
+                        $("#btnSaveSubCategory").show();
+                        $("#btnUpdateSubCategory").hide();
+                        $("#btnCancelSubCategory").hide();
+
+                         window.location.href = '/Product/Category';
+                      //  $('#SubCategoryTable').dataTable({
+                       // });
+                    }
+                    else {
+                        swal("Something went wrong!", "error");
+                    }
+                }
+            })
+    });
+
+    $('#btnCancelSubCategory').click(function () {
+
+        $("#txtSubCategoryId").val("");
+        $("#txtSubCategoryName").val("");
+        $("#btnUpdateSubCategory").hide();
+        $("#btnCancelSubCategory").hide();
+        $("#btnAddNewSubCategory").show();
+        $("#btnSaveSubCategory").show();
+
+    });
+
+</script>
+

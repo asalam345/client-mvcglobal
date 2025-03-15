@@ -1,0 +1,180 @@
+﻿
+@{
+    ViewBag.Title = "Purchase";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+	<style>
+		#productInfoTable tr{
+            border: 1px solid #ddd;
+            padding:10px;
+		}
+		#productInfoTable tr td,th{
+			border-right: 1px solid #ddd;
+			padding: 10px;
+		}
+	</style>
+<div class="container">
+    <div class="col-sm-8 col-sm-offset-2">
+        <p class="label-info" style="text-align:center;font-weight:bold;font-size:20px; height:30px;color:white">Product Purchase Window </p>
+    </div>
+
+    <br />
+    <br />
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-sm-2">
+                    <span> Challan No :</span>
+                </div>
+                <div class="col-sm-4">
+                    <input id="txtChallanNo" class="form-control" placeholder="Challan No" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2">
+                    <span> Supplier Name :</span>
+                </div>
+                <div class="col-sm-4">
+                    @if (ViewBag.SUPLIER != null)
+                    {
+                        @Html.DropDownList("ddlSUPLIER", new SelectList(ViewBag.SUPLIER, "Value", "Text"), "Select Supplier", new { @class = "form-control", @id = "ddlSUPLIER" })
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-10">
+                <fieldset style="border:1px solid #e6efd6; padding:12px;">
+                    <legend style="border:none">Product Information</legend>
+                    <table id="productInfoTable" style="border:1px solid #eee;padding:10px;margin-bottom:10px;">
+                        <thead>
+							<tr>
+								<th style="display:none;"></th>
+								<th>
+									Item Name
+								</th>
+								<th>
+									Purchase Price
+								</th>
+								<th>Sales Price</th>
+								<th>
+									Quantity
+								</th>
+								<th></th>
+							</tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                    <div class="row">
+						<div class="form-group">
+							<div class="col-sm-4">
+								@if (ViewBag.ITEM != null)
+								{
+									@Html.DropDownList("ddlITEM", new SelectList(ViewBag.ITEM, "Value", "Text"), "Select Item", new { @class = "form-control", @id = "ddlITEM" })
+								}
+							</div>
+							<div class="col-sm-2">
+								<input id="txtPurchasePrice" class="form-control" placeholder="Purchase Price" />
+							</div>
+
+							<div class="col-sm-2">
+								<input id="txtSalesPrice" class="form-control" placeholder="Sales Price" />
+							</div>
+
+							<div class="col-sm-2">
+								<input id="txtQuantity" class="form-control" placeholder="Quantity" />
+							</div>
+							<div class="col-sm-2">
+								<button id="btnAdd" class="btn btn-success"> Add Item </button>
+							</div>
+
+						</div>
+                    </div>
+                </fieldset>
+
+            </div>
+			@*<div class="col-sm-2" style="margin-top:5%;">
+				<button id="btnAddNew" class="btn btn-success" type="button"> AddNew</button>
+				
+			</div>*@
+        </div>
+
+
+        <hr />
+
+        <div class="form-group">
+            <div class="col-sm-2">
+                <span>Total Item =</span>
+            </div>
+
+            <div class="col-sm-2">
+                <input id="txtTotalItem" class="form-control" placeholder="Total Item" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <span>Total Qnty =</span>
+            </div>
+
+            <div class="col-sm-2">
+                <input id="txtTotalQnty" class="form-control" placeholder="Total Qnty" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <span>Total Price =</span>
+            </div>
+
+            <div class="col-sm-2">
+                <input id="txtTotalPrice" class="form-control" placeholder=" Total Price" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-4">
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2">
+                <span>Commision Amount =</span>
+            </div>
+
+            <div class="col-sm-2">
+                <input id="txtDiscountAmount" class="form-control" placeholder="Commision Amount" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-4">
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-sm-2">
+                <span>Net Price =</span>
+            </div>
+
+            <div class="col-sm-2">
+                <input id="txtNetPrice" class="form-control" placeholder="Net Price" />
+            </div>
+        </div>
+
+
+        <div class="col-sm-10 col-sm-offset-2">
+			@*<button id="btnAddNew" class="btn btn-success" type="button"> AddNew</button>*@
+            <button id="btnPurchaseSave" class="btn btn-success" type="button" onclick="Purchase()"> Save</button>
+            <button id="btnClear" class="btn btn-success" type="button"> Clear</button>
+            @*<button id="btnSave" class="btn btn-success" type="button"> Done</button>*@
+        </div>
+
+    </div>
+
+</div>

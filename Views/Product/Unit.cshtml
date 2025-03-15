@@ -1,0 +1,249 @@
+﻿@model IEnumerable<mvcglobal.Models.ModelProduct>
+@*@model mvcglobal.Models.ModelUnit*@
+@{
+    ViewBag.Title = "Unit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="col-sm-8 col-sm-offset-2">
+        <p class="label-info" style="text-align:center;font-weight:bold;font-size:20px; height:30px;color:white">Product Unit Window </p>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="col-sm-6 col-lg-offset-3">
+        <div class="row">
+
+            <div id="userform">
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <span> Unit Id :</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <input id="txtUnitId" class="form-control" placeholder="Unit Id" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-4">
+                        <span> Unit Name :</span>
+                    </div>
+                    <div class="col-sm-8">
+                        <input id="txtUnitName" class="form-control" placeholder="Unit Name" />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <br />
+        <div class="col-sm-8 col-sm-offset-4">
+            <button id="btnAddNew" class="btn btn-success"  type="button"> Add New</button>
+            <button id="btnUpdate" class="btn btn-success"  type="button" style="display:none">Update</button>
+            <button id="btnCancel" class="btn btn-success" type="button" style="display:none"> Cancel</button>
+            <button id="btnSave" class="btn btn-success" type="button"> Save</button>
+        </div>
+
+    </div>
+
+</div>
+<hr />
+
+
+<div class="col-sm-6 col-sm-offset-3">
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-hover  table-bordered" id="sampleTable" style="background-color:white !important;">
+                <thead>
+                    <tr>
+                        <th>Unit Id</th>
+                        <th>Unit Name</th>
+                        <th style="width:135px !important;">Action</th>
+                    </tr>
+                </thead>
+                @foreach (var item in @ViewBag.UnitInfo as List<mvcglobal.Models.ModelProduct>)
+                {
+                    <tr>
+                        <td class="UnitId">@item.UnitId</td>
+                        <td class="UnitName">@item.UnitName</td>
+
+                        <td><a id="@item.UnitId" href="javascript:;" class="Edit_class btn btn-default" style="width:80px !important;">Edit</a>  <a id="@item.UnitId" href="javascript:;" class="Delete_class btn btn-danger">Delete</a></td>
+
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+    $('#sampleTable').dataTable({
+    });
+
+    $('#btnAddNew').click(function () {
+        var valid = this.checkValidity();
+        if (valid) {
+            debugger;
+            event.preventDefault()
+            var strUnitId = $("#txtUnitId").val();
+            $.ajax({
+                type: "POST",
+                url: "/Product/ShowUnitId",
+                data: '{strUnitId:"' + strUnitId + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+                    $("#txtUnitId").val(data[0]);
+                    $("#txtUnitName").val("");
+                }
+            });
+        }
+    });
+
+
+    $('#btnSave').click(function () {
+        var valid = this.checkValidity();
+        $("#valid").html(valid);
+        if (valid) {
+            debugger;
+            event.preventDefault()
+            var strUnitId = $("#txtUnitId").val();
+            var strUnitName = $("#txtUnitName").val();
+            $.ajax({
+                type: "POST",
+                url: "/Product/AddUnit",
+                data: '{strUnitId:"' + strUnitId + '", strUnitName:"' + strUnitName + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+                    if (data == "Successful") {
+                        swal("Added!", "Data Added Successfully.", "success");
+
+                        $("#txtUnitId").val("");
+                        $("#txtUnitName").val("");
+                        window.location.href = '/Product/Unit';
+
+                    }
+                    else {
+                        swal("Something went wrong!", "error");
+                    }
+                }
+            });
+        }
+    });
+
+    $('.Edit_class').on('click', function () {
+        $("#btnAddNew").hide();
+        $("#btnSave").hide();
+        $("#btnUpdate").show();
+        $("#btnCancel").show();
+
+        var row = $(this).closest("tr");
+        UnitId = row.find(".UnitId").html();
+        UnitName = row.find(".UnitName").html();
+        $(window).scrollTop(0);
+        $("#txtUnitId").val(UnitId);
+        $("#txtUnitName").val(UnitName)
+        $(window).scrollTop(0);
+    });
+
+
+    $('.Delete_class').on('click', function () {
+
+        var UnitId = this.id;
+        var TableName = $(this).closest('.caption').children('.title').text();
+        swal({
+            title: "Are you sure want to Delete?",
+            text: "You will not be able to recover this file!",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Product/DeleteUnitData",
+                    data: '{UnitID:"' + UnitId + '"}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+
+                    success: function (data, status) {
+                        if (data == "Successful") {
+                            swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                            window.location.href = '/Product/Unit';
+
+                        }
+                        else {
+                            swal("Something went wrong!", "error");
+                        }
+                    },
+
+                });
+
+
+            } else {
+                swal("Cancelled", "Your file is safe :)", "error");
+            }
+        });
+
+    });
+
+
+    $('#btnUpdate').click(function () {
+        var UnitId = $("#txtUnitId").val();
+        var UnitName = $("#txtUnitName").val();
+
+        debugger;
+        $.ajax
+            ({
+                type: "POST",
+                url: "/Product/UpdateUnitData",
+                data: '{UnitId:"' + UnitId + '",UnitName:"' + UnitName + '"}',
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (data, status) {
+                    if (data == "Successful") {
+                        swal("Updated!", "Your imaginary file has been Updated.", "success");
+
+                        $("#txtUnitId").val("");
+                        $("#txtUnitName").val("");
+                        $("#btnAddNew").show();
+                        $("#btnSave").show();
+                        $("#btnUpdate").hide();
+                        $("#btnCancel").hide();
+
+                        window.location.href = '/Product/Unit';
+
+                    }
+                    else {
+                        swal("Something went wrong!", "error");
+                    }
+                }
+            })
+    });
+
+    $('#btnCancel').click(function () {
+
+        $("#txtUnitId").val("");
+        $("#txtUnitName").val("");
+        $("#btnUpdate").hide();
+        $("#btnCancel").hide();
+        $("#btnAddNew").show();
+        $("#btnSave").show();
+
+    });
+
+
+</script>
+
+
+
